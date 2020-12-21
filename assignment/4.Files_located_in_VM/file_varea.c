@@ -37,45 +37,45 @@ __SYSCALL_DEFINEx(1,info,pid_t,pid)
 {
 	struct task_struct *t = NULL; // store task information
 	struct mm_struct *mm = NULL; // data structure for holding information about memory which task uses
-    struct vm_area_struct *vma = NULL; // list of VMAs
+    	struct vm_area_struct *vma = NULL; // list of VMAs
 	struct file *f = NULL; // mean file itself
 	char *buff = kmalloc(MAX_BUF, GFP_KERNEL); // for kernel memory allocation
-    char *filename = NULL;
+    	char *filename = NULL;
 	
 	/* return "task_struct" structure */
 	if((t = pid_task(find_vpid(pid), PIDTYPE_PID)) == NULL) {
-        printk(KERN_ERR "pid_task error\n");
-        return 0;
-    }
+        	printk(KERN_ERR "pid_task error\n");
+        	return 0;
+    	}
 	
 	/* Increment use count 1, Bring "t" task_struct structure */
-    if((mm = get_task_mm(t)) == NULL) {
+    	if((mm = get_task_mm(t)) == NULL) {
 		printk(KERN_ERR "get_task_mm error\n");
 		return 0;
 	}
 
-    printk(KERN_INFO "########## Loaded files of a process '%s(%d)' in VM ##########",t->comm, t->pid); // Print pid and name existed in kernel
+    	printk(KERN_INFO "########## Loaded files of a process '%s(%d)' in VM ##########",t->comm, t->pid); // Print pid and name existed in kernel
 	vma = mm->mmap; // store list of VMAs.
-    while(vma) // until nowhere task.
-    {
-        f = vma->vm_file;  // 
+    	while(vma) // until nowhere task.
+    	{
+        	f = vma->vm_file;  // 
 		if(f)
 		{
 			memset(buff,0,MAX_BUF);
 			filename = d_path(&f->f_path,buff,MAX_BUF); // save file's entire path at buffer
-			/*Print virtual memory's start & end address,  
+			/* Print virtual memory's start & end address,  
 				code segment area,
 				data segment area,
 				heap's start, end,
 				information's original file path.
 			*/
-            printk(KERN_INFO "mem(%06lx-%06lx) code(%06lx-%06lx) data(%06lx-%06lx) heap(%07lx-%07lx) %s\n",
-                vma->vm_start,vma->vm_end,mm->start_code,mm->end_code,mm->start_data, mm->end_data,mm->start_brk,mm->brk,filename);
+            	printk(KERN_INFO "mem(%06lx-%06lx) code(%06lx-%06lx) data(%06lx-%06lx) heap(%07lx-%07lx) %s\n",
+                	vma->vm_start,vma->vm_end,mm->start_code,mm->end_code,mm->start_data, mm->end_data,mm->start_brk,mm->brk,filename);
 		}
 		vma = vma->vm_next; // point to another virtual memory block
-    }
+    	}
 	printk(KERN_INFO "###########################################################################################################################\n");
-    mmput(mm); // decrement use count 1, if use count == 1 : free allocated memory space.
+    	mmput(mm); // decrement use count 1, if use count == 1 : free allocated memory space.
 	kfree(buff); // kernel free()
 	return 0;
 }
