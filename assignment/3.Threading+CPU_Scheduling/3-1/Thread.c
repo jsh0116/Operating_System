@@ -37,16 +37,16 @@ void *thread_func(void *arg)
 	long long buff[MAX_BUFF];
 	char temp[MAX_BUFF];
 	bzero(buff,sizeof(buff));
-    bzero(temp,sizeof(temp));
+	bzero(temp,sizeof(temp));
     
 #ifdef MUTEX
 	pthread_mutex_lock(&mutex); // mutex lock
 #endif
 	// file open //
 	FILE *fp1 = fopen("./temp.txt", "rt");
-    if(fp1 == NULL) {
+    	if(fp1 == NULL) {
 		fprintf(stderr,"file open failed\n");
-        exit(1);
+        	exit(1);
 	}
 	temp[strlen(temp)-1] = '\0';
 	while(fgets(temp,sizeof(MAX_BUFF),fp1) != NULL) {
@@ -64,13 +64,13 @@ void *thread_func(void *arg)
 	}	
 	fclose(fp1);
 	FILE *fp2 = fopen("./temp.txt", "a"); // open file for appending number
-    if(fp2 == NULL) {
-        fprintf(stderr,"file open failed\n");
-        exit(1);
-    }
-    //fprintf(fp2,"%lld\n",sum_list[list]); // append multiplication result on text file
-    fclose(fp2); // close file
-    g_list = list;
+    	if(fp2 == NULL) {
+        	fprintf(stderr,"file open failed\n");
+        	exit(1);
+    	}
+    	//fprintf(fp2,"%lld\n",sum_list[list]); // append multiplication result on text file
+    	fclose(fp2); // close file
+    	g_list = list;
 #ifdef MUTEX
 	pthread_mutex_unlock(&mutex); // mutex unlock
 #endif
@@ -93,9 +93,9 @@ void *thread_result(void *arg)
 	pthread_mutex_lock(&mutex); // mutex lock
 #endif
 	FILE *fp3 = fopen("./temp.txt", "a"); // open file for appending number
-    if(fp3 == NULL) {
+    	if(fp3 == NULL) {
 		fprintf(stderr,"file open failed\n");
-    	exit(1);
+    		exit(1);
 	}
 	
 	//printf("step %d : %lld + %lld = ",++step,sum_list[first],sum_list[first+1]);
