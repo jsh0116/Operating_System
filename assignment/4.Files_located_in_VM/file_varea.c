@@ -58,7 +58,7 @@ __SYSCALL_DEFINEx(1,info,pid_t,pid)
 	vma = mm->mmap; // store list of VMAs.
     	while(vma) // until nowhere task.
     	{
-        	f = vma->vm_file;  // 
+        	f = vma->vm_file;  // point to file in virtual memory
 		if(f)
 		{
 			memset(buff,0,MAX_BUF);
@@ -69,8 +69,8 @@ __SYSCALL_DEFINEx(1,info,pid_t,pid)
 				heap's start, end,
 				information's original file path.
 			*/
-            	printk(KERN_INFO "mem(%06lx-%06lx) code(%06lx-%06lx) data(%06lx-%06lx) heap(%07lx-%07lx) %s\n",
-                	vma->vm_start,vma->vm_end,mm->start_code,mm->end_code,mm->start_data, mm->end_data,mm->start_brk,mm->brk,filename);
+            		printk(KERN_INFO "mem(%06lx-%06lx) code(%06lx-%06lx) data(%06lx-%06lx) heap(%07lx-%07lx) %s\n",
+                		vma->vm_start,vma->vm_end,mm->start_code,mm->end_code,mm->start_data, mm->end_data,mm->start_brk,mm->brk,filename);
 		}
 		vma = vma->vm_next; // point to another virtual memory block
     	}
